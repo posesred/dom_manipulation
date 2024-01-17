@@ -13,7 +13,7 @@
 
 // Your code goes here...
 
-
+const allItems = document.querySelectorAll('.item');
 
 /**
  * @task
@@ -24,7 +24,7 @@
 
 // Your code goes here...
 
-
+const sortBtn = document.querySelectorAll('.sortBtn');
 
 /**
  * @task
@@ -38,7 +38,23 @@
  */
 
 // Your code goes here...
+const sortDesc = (a, b) => {
+    if (a.id < b.id) return 1;
+    else if (a.id > b.id) return -1;
+    else return 0;
+}
+const sortAsc = (a,b) =>{
+    if(a.id < b.id) return -1;
+    else if(a.id > b.id) return 1;
+    else return 0; // would never happen ids are unique unless neither are assigned then error happens
+}
 
+function sortData(direction){
+    const newArr = Array.from(allItems);
+    const container = document.getElementById('main');
+    direction === 'desc' ? newArr.sort(sortDesc): newArr.sort(sortAsc);
+    newArr.forEach((item)=> container.append(item));
+};
 
 
 /**
@@ -50,5 +66,10 @@
  */
 
 // Your code goes here...
-
+for(let i = 0; i < sortBtn.length; i++){
+    sortBtn[i].addEventListener('click',function(){
+        const direction = this.dataset.sortdir;
+        sortData(direction);
+    })
+}
 

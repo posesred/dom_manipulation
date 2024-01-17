@@ -38,3 +38,49 @@
  */
 
 // Your code goes here...
+const cardList = document.querySelectorAll('.card');
+
+const storageFavsIdRaw = localStorage.getItem("favorites");
+
+let updatedId;
+
+if(storageFavsIdRaw){
+    updatedId = JSON.parse(storageFavsIdRaw)
+}else{
+    const favoritesId = [1,2,3,4,5];
+    localStorage.setItem("favorites", JSON.stringify(favoritesId));
+    updatedId = favoritesId;
+}
+
+favBgRed(updatedId);
+
+function favBgRed(idArray) {
+    for (let i = 0; i < cardList.length; i++) {
+        const cardId = parseInt(cardList[i].id);
+        if (idArray.includes(cardId)) {
+            cardList[i].style.backgroundColor = 'red';
+        } else {
+            cardList[i].style.backgroundColor = 'white';
+        }
+    }
+}
+
+
+function handleOnClick() {
+    const id = parseInt(this.id);
+    if (updatedId.includes(id)) {
+        const itemToRemove = updatedId.indexOf(id);
+        updatedId.splice(itemToRemove, 1);
+    } else {
+        updatedId.push(id);
+    }
+
+    favBgRed(updatedId);
+
+    localStorage.setItem("favorites", JSON.stringify(updatedId));
+}
+
+
+for(let i = 0; i < cardList.length; i++){
+    cardList[i].addEventListener('click',handleOnClick);
+}
