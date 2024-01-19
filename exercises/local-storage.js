@@ -38,19 +38,28 @@
  */
 
 // Your code goes here...
-const cardList = document.querySelectorAll('.card');
+// const callbackFn = (e) => {
+//     const item = e.target;
+//     if (Array.from(item.classList).includes('item')) {
+//       if (item.style.backgroundColor === 'orange') {
+//         item.style.backgroundColor = 'red';
+//       } else {
+//         item.style.backgroundColor = 'orange';
+//       }
+//     }
+//   };
+  
+//   // Grab the container Node by id
+  
+//   // add the eventListener to the container Node
 
+
+
+const cardList = document.querySelectorAll('.card');
+const container = document.querySelector('.cardsContainer');
 const storageFavsIdRaw = localStorage.getItem("favorites");
 
-let updatedId;
-
-if(storageFavsIdRaw){
-    updatedId = JSON.parse(storageFavsIdRaw)
-}else{
-    const favoritesId = [1,2,3,4,5];
-    localStorage.setItem("favorites", JSON.stringify(favoritesId));
-    updatedId = favoritesId;
-}
+let updatedId = storageFavsIdRaw ? JSON.parse(storageFavsIdRaw) : [];
 
 favBgRed(updatedId);
 
@@ -65,22 +74,24 @@ function favBgRed(idArray) {
     }
 }
 
+function updateLocalStorage(idArray) {
+    localStorage.setItem("favorites", JSON.stringify(idArray));
+}
 
-function handleOnClick() {
-    const id = parseInt(this.id);
-    if (updatedId.includes(id)) {
-        const itemToRemove = updatedId.indexOf(id);
-        updatedId.splice(itemToRemove, 1);
-    } else {
-        updatedId.push(id);
+function handleOnClick(event) {
+    const card = event.target.closest('.card');
+    if (card) {
+        const id = parseInt(card.id);
+        if (updatedId.includes(id)) {
+            const itemToRemove = updatedId.indexOf(id);
+            updatedId.splice(itemToRemove, 1);
+        } else {
+            updatedId.push(id);
+        }
+
+        favBgRed(updatedId);
+        updateLocalStorage(updatedId);
     }
-
-    favBgRed(updatedId);
-
-    localStorage.setItem("favorites", JSON.stringify(updatedId));
 }
 
-
-for(let i = 0; i < cardList.length; i++){
-    cardList[i].addEventListener('click',handleOnClick);
-}
+container.addEventListener('click', handleOnClick);
